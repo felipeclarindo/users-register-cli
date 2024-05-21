@@ -7,10 +7,15 @@ def protegerSenha(senha:str) -> str:
     return hash.hexdigest()
 
 def mostrarCampos() -> None:
-    campos = ["login", "tipo de Login","email", "nome", "cpf", "rg", "data de nascimento", "senha", "endereco", "role"]       
-    for i, campo in enumerate(campos):
-        print(f"{i} - {campo.title()}")
-
+    campos = ["login", "tipo de Login","email", "nome", "cpf", "rg", "data de nascimento", "senha", "endereco", "role"]      
+    metade = len(campos) // 2
+    for indice in range(metade):
+        coluna1 = f"{indice} -> {campos[indice].title()}"
+        coluna2 = f"{indice + metade} -> {campos[indice + metade].title()}"
+        while len(coluna1) < 25:
+            coluna1 += " "
+        print(f"{coluna1} {coluna2}")
+    
 def deletarUsuario(bd:list[tuple], usuario:str, usuarioLogado:str) -> None:
     try:
         for user in bd:
@@ -88,7 +93,7 @@ def mostrarUsuarios(bd:list[tuple]) -> None:
 def usuarioInBd(bd:list[tuple], usuario:str) -> bool:
     try:
         for user in bd:
-            if user[0] == usuario:
+            if user[0].lower() == usuario.lower():
                     return True
             else:
                 raise Exception("Usuario não encontrado!")
@@ -116,11 +121,8 @@ def verificarPermissão(bd:list[tuple], usuario:str) -> bool:
 
 def cadastrarUsuario(bd:list[tuple], login:str, tipo:str, email:str, nome:str, rg:str, cpf:str, nascimento:str, senha:str, endereco:str, role:str) -> bool:
     try:
-        if not usuarioInBd:
-            bd.append((login, tipo, email, nome, rg, cpf, nascimento, senha, endereco, role))
-            return True
-        else:
-            raise Exception("Usuario ja existente!")
+        bd.append((login, tipo, email, nome, rg, cpf, nascimento, senha, endereco, role))
+        return True
     except ValueError:
         print("Valor invalido!")
     except Exception as e:
