@@ -124,6 +124,10 @@ class Main:
                     for indice in indice_campos:
                         match indice:
                             case "0" | "1":
+                                if indice == "0":
+                                    indice_campos.remove("1")
+                                else:
+                                    indice_campos.remove("0")
                                 self.bannerAtualizando()
                                 print("Se você selecionou campo de usuário ou o tipo do usuario, \nvocê terá que alterar ambos.")
                                 input("APERTE ENTER PARA CONTINUAR")
@@ -185,7 +189,6 @@ class Main:
                                 sleep(1)
                                 self.bannerAtualizando()
                                 print("Login atualizado com sucesso!")
-                                input("APERTE ENTER PARA CONTINUAR")
                                 self.database[indiceUser] = (login, tipoLogin, user[2], user[3], user[4], user[5], user[6], user[7], user[8], user[9])
 
                             case "2":
@@ -377,7 +380,7 @@ class Main:
             while not continuar:
                 self.bannerAtualizando()
                 resposta = input("Deseja selecionar outro campo? [Sim/Não]\n").title().strip()
-                continuar = confimarSaida(resposta)
+                continuar = confirmarSaida(resposta)
                 if not verificarSaida:
                     input("APERTE ENTER PARA CONTINUAR")   
             if resposta != "Sim":
@@ -387,7 +390,6 @@ class Main:
         sleep(1)
         self.bannerAtualizando()
         self._atualizarUsuario(usuario, indices)
-        print(self.database)
 
     def cadastrarUsuario(self) -> None:                            # Cadastrar usuario
         permitido = False
@@ -396,193 +398,197 @@ class Main:
             if not permitido:
                 print("Usuario sem permissão de cadastro")
                 break
-        if permitido:
-            cadastrado = False
-            while not cadastrado:
-                loginEscolhido = False
-                while not loginEscolhido:
-                    self.loginMenu()
-                    choice = str(input("Qual o login do usuario? ")).strip()
-                    match choice:
-                        case "1":
-                            loginValido = False
-                            while not loginValido:
-                                self.bannerCadastro()
-                                login = str(input("Informe o email: ")).strip()
-                                loginValido = validarLogin(login, choice)
-                                tipoLogin = "email"
-                                if not loginValido:
-                                    input("APERTE ENTER PARA CONTINUAR")
-                            senhaValida = False
-                            while not senhaValida: 
-                                self.bannerCadastro()
-                                senha = str(input("Informe a senha: ")).strip()
-                                senhaValida = validarSenha(senha)
-                                if not senhaValida:
-                                    input("APERTE ENTER PARA CONTINUAR")
-                            senha = protegerSenha(senha)
-                            loginEscolhido = True
-                        
-                        case "2":
-                            loginValido = False
-                            while not loginValido:
-                                self.bannerCadastro()
-                                login = str(input("Informe o usuario: ")).strip()
-                                loginValido = validarLogin(login, choice)
-                                tipoLogin = "usuario"
-                                if not loginValido:
-                                    input("APERTE ENTER PARA CONTINUAR:")
-                            senhaValida = False
-                            while not senhaValida: 
-                                self.bannerCadastro()
-                                senha = str(input("Informe a senha: ")).strip()
-                                senhaValida = validarSenha(senha)
-                                if not senhaValida:
-                                    input("APERTE ENTER PARA CONTINUAR")
-                            senha = protegerSenha(senha)
-                            loginEscolhido = True
-                        
-                        case "3":
-                            loginValido = False
-                            while not loginValido:
-                                self.bannerCadastro()
-                                login = str(input("Informe o cpf: ")).strip()
-                                loginValido = validarLogin(login, choice)
-                                tipoLogin = "cpf"
-                                if not loginValido:
-                                    input("APERTE ENTER PARA CONTINUAR")
-                            senhaValida = False
-                            while not senhaValida: 
-                                self.bannerCadastro()
-                                senha = str(input("Informe a senha: ")).strip()
-                                senhaValida = validarSenha(senha)
-                                if not senhaValida:
-                                    input("APERTE ENTER PARA CONTINUAR")
-                            senha = protegerSenha(senha)
-                            loginEscolhido = True
-                        
-                        case "4":
-                            loginValido = False
-                            while not loginValido:
-                                self.bannerCadastro()
-                                login = str(input("Informe o rg: ")).strip()
-                                loginValido = validarLogin(login, choice)
-                                tipoLogin = "rg"
-                                if not loginValido:
-                                    input("APERTE ENTER PARA CONTINUAR")
-                            senhaValida = False
-                            while not senhaValida: 
-                                self.bannerCadastro()
-                                senha = str(input("Informe a senha: ")).strip()
-                                senhaValida = validarSenha(senha)
-                                if not senhaValida:
-                                    input("APERTE ENTER PARA CONTINUAR")
-                            senha = protegerSenha(senha)
-                            loginEscolhido = True
-                        case _:
-                            print("Opção Invalida")
-                            input("APERTE ENTER PARA CONTINUAR")
-                emailValido = False
-                while not emailValido:
-                    self.bannerCadastro()
-                    email = str(input("Qual o email do usuario? ")).strip()
-                    emailValido = validarEmail(email)
-                    if not emailValido:
-                        input("APERTE ENTER PARA CONTINUAR")
-                nomeValido = False
-                while not nomeValido:
-                    self.bannerCadastro()
-                    nome = str(input("Qual o nome do usuario? ")).strip()
-                    nomeValido = validarNome(nome)
-                    if not nomeValido:
-                        input("APERTE ENTER PARA CONTINUAR")
-                documentoValido = False
-                while not documentoValido:
-                    self.bannerCadastro()
-                    print("Documentos")
-                    print("1 - CPF")
-                    print("2 - RG")
-                    option = str(input("Informe o documento desejado: "))
-                    match option:
-                        case "1":
-                            cpfValido = False
-                            while not cpfValido:
-                                self.bannerCadastro()
-                                cpf = str(input("Informe o CPF do usuario: "))
-                                cpfValido = validarCpf(cpf)
-                                if not cpfValido:
-                                    input("APERTE ENTER PARA CONTINUAR")
-                            rg = None
-                            documentoValido = True
-                        case "2":
-                            rgValido = False
-                            while not rgValido:
-                                self.bannerCadastro()
-                                rg = str(input("Informe o RG do usuario: "))
-                                rgValido = validarRg(rg)
-                                if not rgValido:
-                                    input("APERTE ENTER PARA CONTINUAR")
-                            cpf = None
-                            documentoValido = True
-                        case _:
-                            print("Opção invalida!")
-                    if not documentoValido:
-                        input("APERTE ENTER PARA CONTINUAR")
-                dataValida = False
-                while not dataValida:
-                    self.bannerCadastro()
-                    data = str(input("Informe a data de nascimento do usuario: "))
-                    dataValida = validarData(data)
-                    if not dataValida:
-                        input("APERTE ENTER PARA CONTINUAR")
-                endereco_valido = False
-                while not endereco_valido:
-                    self.bannerCadastro()
-                    endereco = str(input("Informe o endereço: ")).strip()
-                    endereco_valido = validarEndereco(endereco)
-                    if not endereco_valido:
-                        input("APERTE ENTER PARA CONTINUAR")
-                roleValida = False
-                while not roleValida:
-                    self.bannerCadastro()
-                    print("Permissões")
-                    print("1 - Admin")
-                    print("2 - User")
-                    choice = str(input("Informe a opção desejada: "))
-                    match choice:
-                        case "1":
-                            role = "admin"
-                            roleValida = True
+        cadastrado = False
+        while not cadastrado:
+            loginEscolhido = False
+            while not loginEscolhido:
+                self.loginMenu()
+                choice = str(input("Qual o login do usuario? ")).strip()
+                match choice:
+                    case "1":
+                        loginValido = False
+                        while not loginValido:
                             self.bannerCadastro()
-                            print("Permissões do usuario definida como admin!")
-                            input("APERTE ENTER PARA CONTINUAR")
-                        case "2":
-                            role = "user"
-                            roleValida = True
+                            login = str(input("Informe o email: ")).strip()
+                            loginValido = validarLogin(login, choice)
+                            tipoLogin = "email"
+                            if not loginValido:
+                                input("APERTE ENTER PARA CONTINUAR")
+                        senhaValida = False
+                        while not senhaValida: 
                             self.bannerCadastro()
-                            print("Permissões do usuario definida como user!")
-                            input("APERTE ENTER PARA CONTINUAR")
-                        case _:
-                            print("Opção invalida!")
-                            input("APERTE ENTER PARA CONTINUAR")
+                            senha = str(input("Informe a senha: ")).strip()
+                            senhaValida = validarSenha(senha)
+                            if not senhaValida:
+                                input("APERTE ENTER PARA CONTINUAR")
+                        senha = protegerSenha(senha)
+                        loginEscolhido = True
+                    
+                    case "2":
+                        loginValido = False
+                        while not loginValido:
+                            self.bannerCadastro()
+                            login = str(input("Informe o usuario: ")).strip()
+                            loginValido = validarLogin(login, choice)
+                            tipoLogin = "usuario"
+                            if not loginValido:
+                                input("APERTE ENTER PARA CONTINUAR:")
+                        senhaValida = False
+                        while not senhaValida: 
+                            self.bannerCadastro()
+                            senha = str(input("Informe a senha: ")).strip()
+                            senhaValida = validarSenha(senha)
+                            if not senhaValida:
+                                input("APERTE ENTER PARA CONTINUAR")
+                        senha = protegerSenha(senha)
+                        loginEscolhido = True
+                    
+                    case "3":
+                        loginValido = False
+                        while not loginValido:
+                            self.bannerCadastro()
+                            login = str(input("Informe o cpf: ")).strip()
+                            loginValido = validarLogin(login, choice)
+                            tipoLogin = "cpf"
+                            if not loginValido:
+                                input("APERTE ENTER PARA CONTINUAR")
+                        senhaValida = False
+                        while not senhaValida: 
+                            self.bannerCadastro()
+                            senha = str(input("Informe a senha: ")).strip()
+                            senhaValida = validarSenha(senha)
+                            if not senhaValida:
+                                input("APERTE ENTER PARA CONTINUAR")
+                        senha = protegerSenha(senha)
+                        loginEscolhido = True
+                    
+                    case "4":
+                        loginValido = False
+                        while not loginValido:
+                            self.bannerCadastro()
+                            login = str(input("Informe o rg: ")).strip()
+                            loginValido = validarLogin(login, choice)
+                            tipoLogin = "rg"
+                            if not loginValido:
+                                input("APERTE ENTER PARA CONTINUAR")
+                        senhaValida = False
+                        while not senhaValida: 
+                            self.bannerCadastro()
+                            senha = str(input("Informe a senha: ")).strip()
+                            senhaValida = validarSenha(senha)
+                            if not senhaValida:
+                                input("APERTE ENTER PARA CONTINUAR")
+                        senha = protegerSenha(senha)
+                        loginEscolhido = True
+                    case _:
+                        print("Opção Invalida")
+                        input("APERTE ENTER PARA CONTINUAR")
+            emailValido = False
+            while not emailValido:
+                self.bannerCadastro()
+                email = str(input("Qual o email do usuario? ")).strip()
+                emailValido = validarEmail(email)
+                if not emailValido:
+                    input("APERTE ENTER PARA CONTINUAR")
+            nomeValido = False
+            while not nomeValido:
+                self.bannerCadastro()
+                nome = str(input("Qual o nome do usuario? ")).strip()
+                nomeValido = validarNome(nome)
+                if not nomeValido:
+                    input("APERTE ENTER PARA CONTINUAR")
+            documentoValido = False
+            while not documentoValido:
+                self.bannerCadastro()
+                print("Documentos")
+                print("1 - CPF")
+                print("2 - RG")
+                option = str(input("Informe o documento desejado: "))
+                match option:
+                    case "1":
+                        cpfValido = False
+                        while not cpfValido:
+                            self.bannerCadastro()
+                            cpf = str(input("Informe o CPF do usuario: "))
+                            cpfValido = validarCpf(cpf)
+                            if not cpfValido:
+                                input("APERTE ENTER PARA CONTINUAR")
+                        rg = None
+                        documentoValido = True
+                    case "2":
+                        rgValido = False
+                        while not rgValido:
+                            self.bannerCadastro()
+                            rg = str(input("Informe o RG do usuario: "))
+                            rgValido = validarRg(rg)
+                            if not rgValido:
+                                input("APERTE ENTER PARA CONTINUAR")
+                        cpf = None
+                        documentoValido = True
+                    case _:
+                        print("Opção invalida!")
+                if not documentoValido:
+                    input("APERTE ENTER PARA CONTINUAR")
+            dataValida = False
+            while not dataValida:
+                self.bannerCadastro()
+                data = str(input("Informe a data de nascimento do usuario: "))
+                dataValida = validarData(data)
+                if not dataValida:
+                    input("APERTE ENTER PARA CONTINUAR")
+            endereco_valido = False
+            while not endereco_valido:
+                self.bannerCadastro()
+                endereco = str(input("Informe o endereço: ")).strip()
+                endereco_valido = validarEndereco(endereco)
+                if not endereco_valido:
+                    input("APERTE ENTER PARA CONTINUAR")
+            roleValida = False
+            while not roleValida:
+                self.bannerCadastro()
+                print("Permissões")
+                print("1 - Admin")
+                print("2 - User")
+                choice = str(input("Informe a opção desejada: "))
+                match choice:
+                    case "1":
+                        self.bannerCadastro()
+                        print("Permissões do usuario definida como admin!")
+                        input("APERTE ENTER PARA CONTINUAR")
+                        role = "admin"
+                        roleValida = True
+                    case "2":
+                        self.bannerCadastro()
+                        print("Permissões do usuario definida como user!")
+                        input("APERTE ENTER PARA CONTINUAR")
+                        role = "user"
+                        roleValida = True
+                    case _:
+                        print("Opção invalida!")
+                        input("APERTE ENTER PARA CONTINUAR")
             usuarioCadastrado = False
             while not usuarioCadastrado:
                 self.bannerCadastro()
                 print("Cadastrando...")
                 sleep(1)
                 self.bannerCadastro()
-                usuarioCadastrado = cadastrarUsuario(self.database, login, tipoLogin, email, nome, rg, cpf, data, senha, endereco, role)
-                if not usuarioCadastrado:
-                    input("APERTE ENTER PARA CONTINUAR")
-            print(f"Usuario {login} cadastrado!")
-            cadastrado = True
+                if not usuarioInBd(self.database, login):
+                    usuarioCadastrado = cadastrarUsuario(self.database, login, tipoLogin, email, nome, rg, cpf, data, senha, endereco, role)
+                    cadastrado = True
+                else:
+                    self.bannerCadastro()
+                    usuarioCadastrado = True
+                    raise Exception("Usuario ja cadastrado!")
+        if cadastrado:
+            self.bannerCadastro()
+            print(f"usuario {login} cadastrado com sucesso!")
 
     def deletarUsuario(self) -> None:
         if len(self.database) >= 1:
-            if len(self.database == 1):
+            if len(self.database) == 1:
                 self.bannerDeletarUsuarios()
-                print("Existe apenas 1 usuario adicionado\n não é possivel remove-lo")
-                input("APERTE ENTER PARA VOLTAR")
+                mostrarUsuarios(self.database)
+                print("\nExiste apenas 1 usuario adicionado\nnão é possivel remove-lo!")
             else:
                 usuarioDeletado = False
                 while not usuarioDeletado:
@@ -600,62 +606,81 @@ class Main:
             print("Você esta sem usuarios adicionados")
             input("APERTE ENTER PARA CONTINUAR")
 
-    def pesquisarUsuario(self):
-        nomeValido = False
-        while not nomeValido:
+    def pesquisarUsuario(self) -> None:
+        userValido = False
+        while not userValido:
             self.bannerBusca()
             mostrarUsuarios(self.database)
-            nomeUsuario = str(input("Informe o nome do usuario: ")).strip()
-            self.bannerBusca()
-            print("Procurando...")
-            sleep(1)
-            self.bannerBusca()
-            nomeValido = usuarioInBd(self.database, nomeUsuario)
-            if not nomeValido:
+            indiceValido = False
+            while not indiceValido:
+                indiceUsuario = int(input("Informe o indice do usuario: "))
+                indiceValido = validarIndice(indiceUsuario)
+                if not indiceValido:
+                    input("APERTE ENTER PARA CONTINUAR")
+            usuario = self.database[indice]
+            if usuarioInBd(self.database, usuario[0]):
+                self.bannerAtualizando
+                self.bannerBusca()
+                print("Procurando...")
+                sleep(1)
+                userValido = True
+            else:
                 input("APERTE ENTER PARA CONTINUAR")
-        indicesCampos = []
         self.bannerBusca()
-        print(f"Usuario {nomeUsuario} encontrado!")
+        print(f"Usuario {self.database[indiceUsuario][0]} encontrado!")
         input("APERTE ENTER PARA CONTINUAR!")
+        indicesCampos = []
         verificarSaida = False
         while not verificarSaida:
             campoValido = False
             while not campoValido:
                 self.bannerBusca()
                 mostrarCampos()
-                campo = input("Informe o indice do campo desejado: ")
+                campo = input("Informe o indice do campo desejado: ").strip()
                 campoValido = verificarCampo(campo, indicesCampos)
                 if not campoValido:
                     input("APERTE ENTER PARA CONTINUAR")
             indicesCampos.append(campo)
-            continuar = False
-            while not continuar:
+            selecionarOutroCampo = False
+            while not selecionarOutroCampo:
                 self.bannerBusca()
                 resposta = input("Deseja selecionar outro campo? [Sim/Não]\n").title().strip()
-                continuar = confimarSaida(resposta)
-                if not continuar:
+                selecionarOutroCampo = confirmarSaida(resposta)
+                if not selecionarOutroCampo:
                     input("APERTE ENTER PARA CONTINUAR")
-            if resposta != "Sim":
+            if resposta != "Sim" :
                 verificarSaida = True
-        campos = ["login", "tipo de Login","email", "nome", "cpf", "rg", "data de nascimento", "senha", "endereco", "role"]  
-        for campo, indice in campos, indicesCampos:
-            if campos.index(campo) == indice:
-                for user in self.database:
-                    if user[0] == nomeUsuario:
-                        print(f"{campo.title()} -> {user[indice]}")
-    def sair(self) -> None:
+        
+        campos = ["login", "tipo de Login","email", "nome", "cpf", "rg", "data de nascimento", "senha", "endereco", "role"]
+        for indice in indicesCampos:
+            indice_int = int(indice)
+            campo = campos[indice_int]
+            user = usuario[indice_int]
+            print(f"{campo}   ->   {user}")
+    def saida(self) -> None:
         verificarSaida = False
         while not verificarSaida:
             self.bannerSaida()
-            confirmar = str(input("Deseja mesmo sair? Sim/Nao\n")).title()
-            verificarSaida = confimarSaida(confirmar)
+            resposta = input("Deseja mesmo sair? [Sim/Nao]\n").title().strip()
+            verificarSaida = confirmarSaida(resposta)
             if not verificarSaida:
                 input("APERTE ENTER PARA CONTINUAR")
-            if confirmar == "Sim":
-                self.sair = True
-                print("Programa finalizado!")
-            else:
-                continue
+        if resposta == "Sim":
+            self.sair = True
+            self.bannerSaida()
+            print("Finalizando...")
+            sleep(1)
+            self.bannerSaida()
+            print("Programa finalizado!")
+        else:
+            print("Certo")
+
+    def mostrarUsuarios(self):
+        self.bannerUsuarios()  
+        print("Buscando usuarios...")
+        sleep(1)
+        self.bannerUsuarios()
+        mostrarUsuarios(self.database)
 
     def executar(self) -> None:
         # self.fazerLogin()
@@ -667,7 +692,6 @@ class Main:
                 try:
                     self.viewMenu()
                     opcao = str(input("Informe a opção desejada: ")).strip()
-                    
                     match opcao:
                         case "1":
                             # Cadastrar Usuario
@@ -677,8 +701,7 @@ class Main:
                             self.atualizarUsuario()
                         case "3":
                             # Mostrar usuarios
-                            self.bannerUsuarios()  
-                            mostrarUsuarios(self.database)
+                            self.mostrarUsuarios()
                         case "4":
                             # Pesquisar usuario
                             self.pesquisarUsuario()
@@ -687,12 +710,10 @@ class Main:
                             self.deletarUsuario()
                         case "6":
                             # Sair
-                            self.sair()
-
+                            self.saida()
                         case _:
+                            # Caso não for nenhum dos mencionados acima
                             print("Opção invalida!")
-                except ValueError:
-                    print("Valor invalido")
                 except Exception as e:
                     print(e)
                 finally:
