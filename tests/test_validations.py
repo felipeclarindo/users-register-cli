@@ -103,22 +103,24 @@ def tests_data_fails():
     assert validarData("31/13/2024") == False
     assert validarData("31/13/2025") == False
 
+# Testes de confirmação de saida
 def tests_confirmar_saida_passeds():
-    assert confimarSaida("Sim") == True
-    assert confimarSaida("Nao") == True
-    assert confimarSaida("nao") == True
-    assert confimarSaida("nAo") == True
-    assert confimarSaida("Não") == True
-    assert confimarSaida("nÃo") == True
-    assert confimarSaida("     Não         ") == True
+    assert confirmarSaida("Sim") == True
+    assert confirmarSaida("Nao") == True
+    assert confirmarSaida("nao") == True
+    assert confirmarSaida("nAo") == True
+    assert confirmarSaida("Não") == True
+    assert confirmarSaida("nÃo") == True
+    assert confirmarSaida("     Não         ") == True
     
 def tests_confirmar_saida_fails():
-    assert confimarSaida("") == False
-    assert confimarSaida("ola") == False
-    assert confimarSaida("n") == False
-    assert confimarSaida("ajda") == False
-    assert confimarSaida("     oi   ") == False
+    assert confirmarSaida("") == False
+    assert confirmarSaida("ola") == False
+    assert confirmarSaida("n") == False
+    assert confirmarSaida("ajda") == False
+    assert confirmarSaida("     oi   ") == False
 
+# Teste de validação de permições
 def tests_validar_role_passeds():
     assert validarRole("admin") == True
     assert validarRole("aDMin") == True
@@ -133,7 +135,7 @@ def tests_validar_roles_fails():
     assert validarRole("-10") == False
     assert validarRole("24@") == False
     
-
+# Teste de verificação dos campos
 def tests_verificar_campos_passeds():
     assert verificarCampo("1",[]) == True
     assert verificarCampo("2", ["5", "6",]) == True
