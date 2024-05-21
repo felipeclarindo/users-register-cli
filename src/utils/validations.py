@@ -1,5 +1,16 @@
 import datetime
 
+def validarIndice(database:list[tuple], indice:str):
+    try:
+        quantidadeUser = len(database)
+        if indice >= 0 and indice <= quantidadeUser:
+            return True
+        else:
+            raise Exception("Informe o indice de acordo com os indices apresentados!")
+    except Exception as e:
+        print(e)
+
+
 def validarSenha(senha:str) -> bool:
     try:
         senha = senha.strip()
@@ -25,6 +36,8 @@ def validarSenha(senha:str) -> bool:
                     continue
             if numericos >= 2 and maiusculo >= 2 and minusculo >= 2 and especiais >= 2:
                 return True
+            else:
+                raise Exception("A senha não atende aos requisitos do sistema!")
         else:
             raise Exception("Senha invalida!")
     except ValueError:
@@ -69,9 +82,8 @@ def validarEmail(email:str) -> bool:
 def validarUsuario(usuario:str) -> bool:
     try:
         usuario = usuario.strip()
-        if len(usuario) > 3:
+        if len(usuario) >= 3:
             usuario = usuario.replace("_", "")
-
             if usuario.isalnum():
                 return True
             else:
@@ -86,10 +98,7 @@ def validarCpf(cpf:str) -> bool:
     try:
         cpf = cpf.strip()
         if len(cpf) > 0:
-            if ".-" in cpf:
-                cpf = cpf.replace("-", "")
-                cpf = cpf.replace(".", "")
-
+            cpf = cpf.replace("-", "").replace(".", "")
             if cpf.isdigit() and len(cpf) == 11:
                 return True
             else:
@@ -104,9 +113,7 @@ def validarRg(rg:str) -> bool:
     try:
         rg = rg.strip()
         if len(rg) > 0:
-            if ".-" in rg:
-                rg = rg.replace(".", "")
-                rg = rg.replace("-", "")
+            rg = rg.replace(".", "").replace("-", "")
             if rg.isdigit() and len(rg) == 9:
                 return True
             else:
@@ -140,7 +147,10 @@ def validarNome(nome:str) -> bool:
     try:
         nome = nome.strip()
         if len(nome) > 0:
-            return nome.isalpha()
+            if nome.isalpha():
+                return True
+            else:
+                raise Exception("Deve ter apenas letras no nome!")
         else:
             raise Exception("O Nome não pode estar vazio!")
     except ValueError:
@@ -209,28 +219,29 @@ def validarData(data:str) -> bool:
 def validarEndereco(endereco:str) -> bool:
     try:
         endereco = endereco.strip()
-        if len(endereco) <= 0:
-            raise Exception("O endereço não pode estar vazio!")
-        else:
-            if "-" in endereco or "," in endereco:
-                endereco = endereco.replace(",","")
-                endereco = endereco.replace("-", "")
+        if len(endereco) > 0:
+            endereco = endereco.replace(",", "").replace("-", "")
             if endereco.isalnum():
                 return True
             else: 
                 raise Exception("Só é permitido conter numeros, letras e ',-' no endereço!")
+        else:
+            raise Exception("O endereço não pode estar vazio!")
     except ValueError:
         print("Valor invalido!")
     except Exception as e:
         print(e)
     return False
 
-def confimarSaida(resposta:str) -> bool:
+def confirmarSaida(resposta:str) -> bool:
     try:
-        if resposta.title().strip() in ["Sim", "Não", "Nao"]:
-            return True
+        if len(resposta) > 0:
+            if resposta.title().strip() in ["Sim", "Não", "Nao"]:
+                return True
+            else:
+                raise Exception("Digite conforme o informado!")
         else:
-            raise Exception("Digite apenas com [Sim/Não]!")
+            raise Exception("O valor não pode esta vazio!")
     except Exception as e:
         print(e)
     return False
@@ -238,9 +249,7 @@ def confimarSaida(resposta:str) -> bool:
 def verificarCampo(campo:str, listaCampos:list[str]) -> bool:
     try:
         if campo.isdigit():
-            if len(campo) < 0:
-                raise Exception("Valor do campo não pode ser vazio!")
-            else:
+            if len(campo) > 0:
                 if int(campo) in range(10):
                     if campo not in listaCampos:
                         return True
@@ -248,6 +257,8 @@ def verificarCampo(campo:str, listaCampos:list[str]) -> bool:
                         raise Exception("Campo ja adicionado!")
                 else:
                     raise Exception("Campo invalido!")
+            else:
+                raise Exception("Valor do campo não pode ser vazio!")
         else:
             raise Exception("O campo precisar ser um dos indices informados!")
     except ValueError:
