@@ -2,14 +2,21 @@ import datetime
 
 def validarIndice(database:list[tuple], indice:str):
     try:
-        quantidadeUser = len(database)
-        if indice >= 0 and indice <= quantidadeUser:
-            return True
+        indice = indice.strip()
+        quantidadeUser = len(database) 
+        if indice.isdigit():
+            indice = int(indice) - 1
+            if indice >= 0 and indice < quantidadeUser:
+                return True
+            else:
+                 raise Exception("Informe o indice de acordo com os indices apresentados!")
         else:
-            raise Exception("Informe o indice de acordo com os indices apresentados!")
+            raise Exception("Indice invalido, é aceito apenas numeros!")
+    except ValueError:
+        print("Valor invalido")
     except Exception as e:
         print(e)
-
+    return False
 
 def validarSenha(senha:str) -> bool:
     try:
@@ -220,7 +227,7 @@ def validarEndereco(endereco:str) -> bool:
     try:
         endereco = endereco.strip()
         if len(endereco) > 0:
-            endereco = endereco.replace(",", "").replace("-", "")
+            endereco = endereco.replace(",", "").replace("-", "").replace(" ", "")
             if endereco.isalnum():
                 return True
             else: 

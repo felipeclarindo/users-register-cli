@@ -15,19 +15,30 @@ def mostrarCampos() -> None:
         while len(coluna1) < 25:
             coluna1 += " "
         print(f"{coluna1} {coluna2}")
-    
-def deletarUsuario(bd:list[tuple], usuario:str, usuarioLogado:str) -> None:
+
+def verificarSeTodosAdmin(database:list[tuple]) -> bool:
+    cont = 0
+    for user in database:
+        if user[9] == "admin":
+            cont += 1
+    if cont == len(database):
+        return True
+    else:
+        return False
+
+def deletarUsuario(database:list[tuple], usuario:str, usuarioLogado:str) -> None:
     try:
-        for user in bd:
+        for user in database:
             if usuario != usuarioLogado:
-                permicaoUserAtual = verificarPermissão(usuarioLogado)
-                permicaoUserSelecionado = verificarPermissão(usuario)
-                if permicaoUserAtual and permicaoUserSelecionado:
-                    raise Exception("Você não pode remover outro admin!")
-                else:
+                permicaoUserAtual = verificarPermissao(database, usuarioLogado)
+                permicaoUserSelecionado = verificarPermissao(database, usuario)
+                if permicaoUserAtual != permicaoUserSelecionado:
                     if user[0] == usuario:
-                        bd.remove(user)
+                        database.remove(user)
                         return True
+                else:
+                    raise Exception("Você não pode remover outro admin!")
+                
             else:
                 raise Exception("Você não pode deletar o usuario que esta logado!")
         else:
@@ -38,10 +49,10 @@ def deletarUsuario(bd:list[tuple], usuario:str, usuarioLogado:str) -> None:
         print(e)
     return False
 
-def verificarIndice(bd, *indices):
+def verificarIndice(database, *indices):
     contador = 0
     for indice in indices:
-        for i in enumerate(bd):
+        for i in enumerate(database):
             if indice == i:
                 contador += 1
     else:
@@ -50,10 +61,10 @@ def verificarIndice(bd, *indices):
         else:
             return False
 
-def buscarCampoUsuario(bd:list[tuple], user:str, campoDesejado:str) -> None:
+def buscarCampoUsuario(database:list[tuple], user:str, campoDesejado:str) -> None:
     try:
-        if usuarioInBd(bd, user):
-            for usuario in bd:
+        if usuarioInBd(database, user):
+            for usuario in database:
                 if usuario[0] == user:
                     match campoDesejado:
                         case "0":
@@ -83,45 +94,45 @@ def buscarCampoUsuario(bd:list[tuple], user:str, campoDesejado:str) -> None:
     except Exception as e:
         print(e)
 
-def mostrarUsuarios(bd:list[tuple]) -> None:
-    if len(bd) > 0:
-        for i, usuario in enumerate(bd):
+def mostrarUsuarios(database:list[tuple]) -> None:
+    if len(database) > 0:
+        for i, usuario in enumerate(database):
             print(f"{i+1} - {usuario[0]}")
     else:
         raise Exception("Nenhum usuario cadastrado!")
         
-def usuarioInBd(bd:list[tuple], usuario:str) -> bool:
+def usuarioInBd(database:list[tuple], usuario:str) -> bool:
     try:
-        for user in bd:
-            if user[0].lower() == usuario.lower():
-                    return True
-            else:
-                raise Exception("Usuario não encontrado!")
+        for user in database:
+            if user[0] == usuario:
+                return True
+        else:
+            raise Exception("Usuario não encontrado!")
     except ValueError:
         print("Valor invalido!")
     except Exception as e:
         print(e)
     return False
 
-def validateUser(bd:list[tuple], login:str, senha:str) -> bool:
-    for usuario in bd:
+def validateUser(database:list[tuple], login:str, senha:str) -> bool:
+    for usuario in database:
         login_cadastrado = usuario[0]
         senha_cadastrada  = usuario[7]
         if login == login_cadastrado and senha == protegerSenha(senha_cadastrada):
             return True
     return False
 
-def verificarPermissão(bd:list[tuple], usuario:str) -> bool:
-    for user in bd:
+def verificarPermissao(database:list[tuple], usuario:str) -> bool:
+    for user in database:
         if user[0] == usuario:
             if user[9] == "admin":
                 return True
     else:
         return False
 
-def cadastrarUsuario(bd:list[tuple], login:str, tipo:str, email:str, nome:str, rg:str, cpf:str, nascimento:str, senha:str, endereco:str, role:str) -> bool:
+def cadastrarUsuario(database:list[tuple], login:str, tipo:str, email:str, nome:str, rg:str, cpf:str, nascimento:str, senha:str, endereco:str, role:str) -> bool:
     try:
-        bd.append((login, tipo, email, nome, rg, cpf, nascimento, senha, endereco, role))
+        database.append((login, tipo, email, nome, rg, cpf, nascimento, protegerSenha(senha), endereco, role))
         return True
     except ValueError:
         print("Valor invalido!")
@@ -132,10 +143,9 @@ def cadastrarUsuario(bd:list[tuple], login:str, tipo:str, email:str, nome:str, r
 def pegarIndiceDoUsuario(database:list[tuple], usuario:str) -> int:
     try:
         for e, user in enumerate(database):
-            if user[0] == usuario:
+            if user[0].lower() == usuario.lower():
                 return e
-        else:
-            raise Exception("Usuario não esta no banco de dados!")
+        raise Exception("Usuario não esta no banco de dados!")
     except ValueError:
         print("Valor invalido")
     except Exception as e:
