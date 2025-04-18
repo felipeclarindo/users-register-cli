@@ -1,15 +1,18 @@
 import datetime
 
-def validarIndice(database:list[tuple], indice:str):
+
+def validarIndice(database: list[tuple], indice: str):
     try:
         indice = indice.strip()
-        quantidadeUser = len(database) 
+        quantidadeUser = len(database)
         if indice.isdigit():
             indice = int(indice) - 1
             if indice >= 0 and indice < quantidadeUser:
                 return True
             else:
-                 raise Exception("Informe o indice de acordo com os indices apresentados!")
+                raise Exception(
+                    "Informe o indice de acordo com os indices apresentados!"
+                )
         else:
             raise Exception("Indice invalido, é aceito apenas numeros!")
     except ValueError:
@@ -18,7 +21,8 @@ def validarIndice(database:list[tuple], indice:str):
         print(e)
     return False
 
-def validarSenha(senha:str) -> bool:
+
+def validarSenha(senha: str) -> bool:
     try:
         senha = senha.strip()
         if len(senha) == 0:
@@ -54,7 +58,7 @@ def validarSenha(senha:str) -> bool:
     return False
 
 
-def validarEmail(email:str) -> bool:
+def validarEmail(email: str) -> bool:
     try:
         email = email.strip()
         if len(email) > 0:
@@ -67,7 +71,7 @@ def validarEmail(email:str) -> bool:
                         if len(dominio_separado) in [2, 3]:
                             for dominio_parte in dominio_separado:
                                 if len(dominio_parte) < 2 or len(email_separado[0]) < 3:
-                                    raise Exception ("Email invalido!")
+                                    raise Exception("Email invalido!")
                                 else:
                                     return True
                         else:
@@ -86,7 +90,8 @@ def validarEmail(email:str) -> bool:
         print(e)
     return False
 
-def validarUsuario(usuario:str) -> bool:
+
+def validarUsuario(usuario: str) -> bool:
     try:
         usuario = usuario.strip()
         if len(usuario) >= 3:
@@ -101,7 +106,8 @@ def validarUsuario(usuario:str) -> bool:
         print(e)
     return False
 
-def validarCpf(cpf:str) -> bool:
+
+def validarCpf(cpf: str) -> bool:
     try:
         cpf = cpf.strip()
         if len(cpf) > 0:
@@ -115,8 +121,9 @@ def validarCpf(cpf:str) -> bool:
     except Exception as e:
         print(e)
     return False
-    
-def validarRg(rg:str) -> bool:  
+
+
+def validarRg(rg: str) -> bool:
     try:
         rg = rg.strip()
         if len(rg) > 0:
@@ -133,16 +140,17 @@ def validarRg(rg:str) -> bool:
         print(e)
     return False
 
-def validarLogin(login:str, opcao:str) -> bool:
+
+def validarLogin(login: str, opcao: str) -> bool:
     try:
         match opcao:
-            case "1": #email
+            case "1":  # email
                 return validarEmail(login)
-            case "2": #Usuario
+            case "2":  # Usuario
                 return validarUsuario(login)
-            case "3": #Cpf
+            case "3":  # Cpf
                 return validarCpf(login)
-            case "4": #Rg
+            case "4":  # Rg
                 return validarRg(login)
     except ValueError:
         print("Valor invalido!")
@@ -150,7 +158,8 @@ def validarLogin(login:str, opcao:str) -> bool:
         print(e)
     return False
 
-def validarNome(nome:str) -> bool:
+
+def validarNome(nome: str) -> bool:
     try:
         nome = nome.strip()
         if len(nome) > 0:
@@ -166,7 +175,12 @@ def validarNome(nome:str) -> bool:
         print(e)
     return False
 
-def _validarData(dia:int, mes:int, ano:int,):
+
+def _validarData(
+    dia: int,
+    mes: int,
+    ano: int,
+):
     try:
         dataAtual = datetime.datetime.now().date()
         verificarDia = dia > 0 and dia <= 31
@@ -174,7 +188,12 @@ def _validarData(dia:int, mes:int, ano:int,):
         verificarAno = ano > 1600 and ano <= dataAtual.year
 
         if verificarAno and ano == dataAtual.year:
-            if verificarDia and dia <= dataAtual.day or verificarMes and mes <= dataAtual.month:
+            if (
+                verificarDia
+                and dia <= dataAtual.day
+                or verificarMes
+                and mes <= dataAtual.month
+            ):
                 return True
             else:
                 raise Exception("O mês/dia não pode ser maior que o mes/dia atual!")
@@ -182,8 +201,8 @@ def _validarData(dia:int, mes:int, ano:int,):
             if verificarMes:
                 if verificarDia:
                     return True
-                else: 
-                   raise Exception("O Dia deve ser maior que 0 e menor ou igual a 31")
+                else:
+                    raise Exception("O Dia deve ser maior que 0 e menor ou igual a 31")
             else:
                 raise Exception("O Mês deve ser maior que 0 e menor ou igual a 12")
         else:
@@ -194,12 +213,13 @@ def _validarData(dia:int, mes:int, ano:int,):
         print(e)
     return False
 
-def validarData(data:str) -> bool:
+
+def validarData(data: str) -> bool:
     try:
         data = data.strip()
         dataAtual = datetime.datetime.now().date()
         if "/" in data:
-            if data.count("/") == 2: 
+            if data.count("/") == 2:
                 data_separada = data.split("/")
                 ano = data_separada[2]
                 mes = data_separada[1]
@@ -212,26 +232,31 @@ def validarData(data:str) -> bool:
                 else:
                     raise Exception("Dia ou mes invalido!")
             else:
-                raise Exception("Formato de data invalido, O formato deve ser XX/XX/XXXX")
-        
+                raise Exception(
+                    "Formato de data invalido, O formato deve ser XX/XX/XXXX"
+                )
+
         else:
             raise Exception("Formato de data invalido, O formato deve ser XX/XX/XXXX")
-        
+
     except ValueError:
         print("Valor invalido!")
     except Exception as e:
         print(e)
     return False
 
-def validarEndereco(endereco:str) -> bool:
+
+def validarEndereco(endereco: str) -> bool:
     try:
         endereco = endereco.strip()
         if len(endereco) > 0:
             endereco = endereco.replace(",", "").replace("-", "").replace(" ", "")
             if endereco.isalnum():
                 return True
-            else: 
-                raise Exception("Só é permitido conter numeros, letras e ',-' no endereço!")
+            else:
+                raise Exception(
+                    "Só é permitido conter numeros, letras e ',-' no endereço!"
+                )
         else:
             raise Exception("O endereço não pode estar vazio!")
     except ValueError:
@@ -240,7 +265,8 @@ def validarEndereco(endereco:str) -> bool:
         print(e)
     return False
 
-def confirmarSaida(resposta:str) -> bool:
+
+def confirmarSaida(resposta: str) -> bool:
     try:
         if len(resposta) > 0:
             if resposta.title().strip() in ["Sim", "Não", "Nao"]:
@@ -253,7 +279,8 @@ def confirmarSaida(resposta:str) -> bool:
         print(e)
     return False
 
-def verificarCampo(campo:str, listaCampos:list[str]) -> bool:
+
+def verificarCampo(campo: str, listaCampos: list[str]) -> bool:
     try:
         if campo.isdigit():
             if len(campo) > 0:
@@ -274,7 +301,8 @@ def verificarCampo(campo:str, listaCampos:list[str]) -> bool:
         print(e)
     return False
 
-def validarRole(role:str) -> bool:
+
+def validarRole(role: str) -> bool:
     try:
         if role.strip().lower() in ["admin", "user"]:
             return role.strip().isalpha()
