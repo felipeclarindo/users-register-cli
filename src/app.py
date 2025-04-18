@@ -1,7 +1,31 @@
 import os
 from time import sleep
-from utils.validations import *
-from modules.database import *
+from utils.validations import (
+    validarLogin,
+    validarEmail,
+    validarNome,
+    validarCpf,
+    validarRg,
+    validarData,
+    validarSenha,
+    validarEndereco,
+    validarRole,
+    validarIndice,
+    verificarCampo,
+    confirmarSaida,
+)
+from modules.database import (
+    protegerSenha,
+    validateUser,
+    pegarIndiceDoUsuario,
+    verificarPermissao,
+    mostrarUsuarios,
+    usuarioInBd,
+    mostrarCampos,
+    cadastrarUsuario,
+    verificarSeTodosAdmin,
+    deletarUsuario,
+)
 
 
 class App:
@@ -9,76 +33,16 @@ class App:
         self.logado = False
         self.database: list[tuple] = [
             (
-                "felipe",
-                "usuario",
-                "fglpc2@gmail.com",
-                "Felipe",
-                None,
-                "013025086123",
-                "13/02/2006",
-                "123",
-                "Rua luis porrio, 415",
-                "admin",
-            ),
-            (
-                "pedro",
-                "usuario",
-                "fglpc2@gmail.com",
-                "Felipe",
-                None,
-                "013025086123",
-                "13/02/2006",
-                "123",
-                "Rua luis porrio, 415",
-                "user",
-            ),
-            (
-                "lucas",
-                "usuario",
-                "fglpc2@gmail.com",
-                "Felipe",
-                None,
-                "013025086123",
-                "13/02/2006",
-                "123",
-                "Rua luis porrio, 415",
-                "admin",
-            ),
-            (
-                "aram",
-                "usuario",
-                "fglpc2@gmail.com",
-                "Felipe",
-                None,
-                "013025086123",
-                "13/02/2006",
-                "123",
-                "Rua luis porrio, 415",
-                "admin",
-            ),
-            (
-                "aaa",
-                "usuario",
-                "fglpc2@gmail.com",
-                "Felipe",
-                None,
-                "013025086123",
-                "13/02/2006",
-                "123",
-                "Rua luis porrio, 415",
-                "admin",
-            ),
-            (
-                "filho",
-                "usuario",
-                "fglpc2@gmail.com",
-                "Felipe",
-                None,
-                "013025086123",
-                "13/02/2006",
-                "123",
-                "Rua luis porrio, 415",
-                "admin",
+                "admin", # Login
+                "usuario",  # Tipo de login
+                "email@gmail.com", # Email
+                "Felipe", # Nome
+                "123456789", # RG
+                "013025086123", # CPF
+                "13/02/2006", # Data de nascimento
+                "admin", # Senha
+                "enrereco", #Endereco
+                "admin", # Role
             ),
             # Posições
             # login                     ->  0
