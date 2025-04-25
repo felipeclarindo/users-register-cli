@@ -18,11 +18,9 @@ git clone git clone https://github.com/felipeclarindo/users-register-cli.git
 
 2. Navigate to the project folder:
 
-````bash
-cd user-register
 ```bash
-cd user-register
-````
+cd users-register-cli
+```
 
 3. Run the program:
 
